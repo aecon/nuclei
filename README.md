@@ -1,5 +1,7 @@
 # nuclei quantification
 
+Quantification of number of nuclei in fluorescently labeled images from cell culture. Uses [Stardist](https://github.com/stardist/stardist) for nuclei segmentation.
+
 *Note*: The plate folders should only contain nuclei images. If they contain more channels those will be wrongly segmented as nuclei.
 
 
