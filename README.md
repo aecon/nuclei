@@ -4,7 +4,12 @@ Note: The plate folders should only contain nuclei images. If they contain more 
 
 
 ## Installation
-1. Download the nuclei code.  
+1. Download the nuclei code. Go to the folder where you wish to download the code, and open in Terminal
+```
+git clone https://github.com/aecon/nuclei.git
+```
+
+
 2. Go inside the `nuclei/` folder.  
 3. Open a Terminal window inside the nuclei folder.  
     In Lunix: Right click - Open in Terminal.
