@@ -1,0 +1,25 @@
+name: nuclei
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+
+  # Core scientific stack
+  - numpy
+  - scipy
+  - scikit-image
+
+  - pip:
+      # Deep learning
+      - tensorflow>=2.15,<2.18
+
+      # StarDist + utilities
+      - stardist
+      - csbdeep
+
+      # Image reading/writing
+      - tifffile
+      - imageio
