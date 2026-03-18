@@ -20,15 +20,15 @@ basedir = '/media/user/SSD2/Simone/test'
 if not os.path.exists(basedir):
     print("ERROR: basedir path is incorrect.")
     sys.exit()
-    assert(0)
 
-files = sorted(glob.glob(basedir + '/**/*).tif', recursive=True))
+files = sorted(glob.glob(basedir + '/**/*.tif', recursive=True))
+files = [f for f in files if os.sep + 'labels' + os.sep not in f]
 
 n = nuclei()
 
 Nfiles = len(files)
 for i,file in enumerate(files):
-    print("Processing image %d/%d:" % (i, Nfiles), file)
+    print("Processing image %d/%d:" % (i+1, Nfiles), file)
 
     # 2025 04 01
     #base1 = os.path.basename( os.path.dirname( os.path.dirname(file)))
@@ -50,7 +50,11 @@ for i,file in enumerate(files):
         os.makedirs(output_folder)
 
     # read image
-    img = skimage.io.imread(file, plugin='tifffile')
+    try:
+        img = skimage.io.imread(file, plugin='tifffile')
+    except Exception as e:
+        print("WARNING: Could not read file, skipping:", e)
+        continue
 
     # process image
     Nnuclei, labels = n.process(img)

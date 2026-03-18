@@ -53,8 +53,8 @@ class nuclei():
         Nlabels = np.shape(unique_labels)[0]
 
         # exclude very small and very large objects
+        kept_labels = []
         avg_brightness = []
-        Nc = 0
         for i in range(1,Nlabels):
             Vol = unique_counts[i]
             idx = (labels==unique_labels[i])
@@ -65,26 +65,27 @@ class nuclei():
             elif Vol>self.max_area:
                 labels[idx] = 0
             else:
+                kept_labels.append(unique_labels[i])
                 avg_brightness.append(np.mean(img[idx]))
         avg_brightness = np.asarray(avg_brightness)
 
         # check if no nuclei were detected
         if len(avg_brightness) < 1:
-            return 0, 0
+            return 0, np.zeros_like(labels)
 
-        # remove very dim objects
+        # remove very dim and very bright objects
         bmax = np.percentile(avg_brightness, 98)
         bmin = np.percentile(avg_brightness, 2)
-        for i in range(1,Nlabels):
-            idx = (labels==unique_labels[i])
-            bavg = np.mean(img[idx])
+        for i, lbl in enumerate(kept_labels):
+            idx = (labels==lbl)
+            bavg = avg_brightness[i]
             if bavg<bmin:
                 labels[idx] = 0
             if bavg>bmax:
                 labels[idx] = 0
 
-        # count number of cells after filters
-        Nnuclei = np.shape(np.unique(labels))[0]
+        # count number of cells after filters (exclude background label 0)
+        Nnuclei = len(np.unique(labels)) - 1
         print("Number of nuclei:", Nnuclei)
 
         return Nnuclei, labels
