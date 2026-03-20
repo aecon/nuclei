@@ -1,85 +1,48 @@
 # Nuclei Quantification
 
-Counts the number of nuclei in fluorescently labeled cell culture images using [StarDist](https://github.com/stardist/stardist) for segmentation.
+Counts nuclei in fluorescently labeled cell culture images using [StarDist](https://github.com/stardist/stardist).
 
-**Important**: The plate folders should only contain nuclei images. If they contain additional channels, those will be incorrectly segmented as nuclei.
+**Important**: Plate folders should only contain nuclei images. Other channels will be incorrectly segmented.
 
 
 ## Installation
 
-### 1. Clone this repository
-
-Open a terminal and navigate to the folder where you want to download the code. Then run:
-
 ```bash
 git clone https://github.com/aecon/nuclei.git
 cd nuclei
-```
-
-### 2. Create a conda environment
-
-This creates a new Python environment called `nuclei` so that the required packages don't interfere with your other projects:
-
-```bash
 conda create -n nuclei python=3.11 -y
-```
-
-### 3. Activate the environment
-
-```bash
 conda activate nuclei
-```
-
-You should see `(nuclei)` appear at the beginning of your terminal prompt. This means the environment is active.
-
-### 4. Install the required packages
-
-This installs all dependencies including GPU support (CUDA/cuDNN) automatically:
-
-```bash
 pip install -r requirements.txt
 ```
 
-To verify that your GPU is detected, run:
-
-```bash
-python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
-```
-
-If successful, you should see something like:
-
-```
-[PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
-```
-
-If the list is empty (`[]`), the code will still work but will run on the CPU (slower).
+To verify GPU support: `python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"`
 
 
 ## Usage
 
-### 1. Set the input folder
+### GUI (recommended)
 
-Open `main.py` in a text editor and change the `basedir` variable to point to the folder that contains your plate folders:
-
-```python
-basedir = '/path/to/your/plates/folder'
+```bash
+conda activate nuclei
+python gui.py
 ```
 
-Save the file.
+A browser window will open. Select your plates folder, optionally check "Skip already processed images", and click Run.
 
-### 2. Run the analysis
+### Command line
 
-Open a terminal, navigate to the `nuclei/` folder, activate the environment, and run the script:
+Edit `basedir` in `main.py`, then:
 
 ```bash
 conda activate nuclei
 python main.py
+python main.py --skip-existing   # to resume an interrupted run
 ```
 
-### 3. Output
 
-The script will:
-- Process all `.tif` images found inside `basedir` (including subfolders).
-- Print progress to the terminal (e.g., `Processing image 1/100: ...`).
-- Save a `labels/` folder next to each image, containing the segmentation masks.
-- Save `.csv` files in `basedir` with nuclei counts per image.
+## Output
+
+- `labels/` subfolder next to each image, containing segmentation masks.
+- `counts_*.csv` files in the plates folder with nuclei counts per image.
+
+CSV files are regenerated from scratch on every run. When using `--skip-existing` (or the GUI checkbox), images with existing label files are not re-segmented — their counts are read from the saved labels.
