@@ -99,11 +99,18 @@ class nuclei():
 
 
     def write_header(self, output_file):
+        nuclei.write_header_static(output_file)
+
+    def write_data(self, output_file, file, Nnuclei):
+        nuclei.write_data_static(output_file, file, Nnuclei)
+
+    @staticmethod
+    def write_header_static(output_file):
         with open(output_file, 'w') as f:
             f.write("%s,%s\n" % ("Image", "NucleiCounts"))
 
-
-    def write_data(self, output_file, file, Nnuclei):
+    @staticmethod
+    def write_data_static(output_file, file, Nnuclei):
         with open(output_file, 'a') as f:
             f.write("\"%s\",%d\n" % (os.path.basename(file), Nnuclei))
 
