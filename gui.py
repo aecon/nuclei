@@ -116,7 +116,7 @@ app.layout = html.Div([
 
     # -- Folder input --
     html.Div([
-        html.Label("Plates folder:"),
+        html.Span(["Plates folder (directory ", html.B("containing all plate folders"), "):"]),
         dcc.Input(id='folder-input', type='text', placeholder='/path/to/plates',
                   style={'width': '600px', 'marginRight': '10px'}),
         html.Button("Browse", id='btn-browse', n_clicks=0, style={'marginRight': '5px'}),
